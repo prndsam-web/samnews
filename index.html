@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0a1e3f" />
+<meta name="description" content="سام نیوز — پوشش زنده اخبار سیاسی، اقتصادی و بین‌الملل" />
+<link rel="manifest" href="./manifest.json" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a1e3f'/><text x='50' y='50' font-size='60' font-family='sans-serif' font-weight='900' fill='white' text-anchor='middle' dy='.35em'>س</text></svg>">
+<title>سام نیوز | آخرین اخبار</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Vazirmatn',Tahoma,sans-serif;-webkit-tap-highlight-color:transparent;}
+:root{--blue:#0a1e3f;--blue2:#123a6b;--red:#c8102e;--live:#e11d2e;--bg:#eef1f5;--card:#fff;--text:#0f172a;--muted:#64748b;--ok:#10b981;--err:#ef4444;--shadow:0 1px 3px rgba(15,23,42,.06),0 4px 12px rgba(15,23,42,.04);--shadow-lg:0 10px 40px rgba(15,23,42,.12);--radius:14px;}
+body{background:var(--bg);color:var(--text);padding-bottom:80px;padding-bottom:calc(80px + env(safe-area-inset-bottom));}
+header{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;padding:12px 16px;position:sticky;top:0;z-index:80;box-shadow:0 4px 20px rgba(10,30,63,.25);display:flex;align-items:center;gap:10px;padding-top:calc(12px + env(safe-area-inset-top));}
+header .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#fff,#e0e7ff);color:var(--blue);display:grid;place-items:center;font-weight:900;font-size:20px;flex-shrink:0;}
+header .brand{display:flex;flex-direction:column;gap:2px;}
+header h1{font-size:18px;font-weight:900;}
+header .tagline{font-size:10px;opacity:.7;}
+header .hd-actions{margin-right:auto;}
+header button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:8px 12px;border-radius:10px;cursor:pointer;font-size:12px;font-family:inherit;font-weight:600;}
+.ticker{background:linear-gradient(90deg,var(--red),#a00d24);color:#fff;padding:8px 16px;font-size:13px;display:flex;align-items:center;gap:10px;overflow:hidden;}
+.ticker .lb{background:#fff;color:var(--red);font-weight:900;padding:2px 8px;border-radius:4px;font-size:10px;flex-shrink:0;}
+.ticker .txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;}
+main{max-width:900px;margin:0 auto;padding:12px;}
+.status-bar{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center;}
+.badge{padding:8px 14px;border-radius:20px;font-size:12px;font-weight:700;background:#fff;color:#475569;border:1.5px solid #e2e8f0;cursor:pointer;font-family:inherit;}
+.badge.live{background:var(--live);color:#fff;border-color:var(--live);animation:pulse 1.5s infinite;}
+.badge.replay{background:#2563eb;color:#fff;border-color:#2563eb;}
+.badge.off{background:#475569;color:#fff;border-color:#475569;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.7;}}
+.viewers{margin-right:auto;font-size:12px;color:#334155;background:#fff;padding:7px 14px;border-radius:20px;box-shadow:var(--shadow);font-weight:600;}
+.viewers b{color:var(--live);}
+.player{position:relative;background:#000;border-radius:var(--radius);overflow:hidden;aspect-ratio:16/9;box-shadow:var(--shadow-lg);margin-bottom:12px;}
+.player video{width:100%;height:100%;object-fit:contain;background:#000;display:block;}
+.player .placeholder{position:absolute;inset:0;display:grid;place-items:center;color:#fff;text-align:center;z-index:1;background:radial-gradient(circle at 30% 20%,rgba(30,64,175,.4),transparent 60%),radial-gradient(circle at 70% 80%,rgba(200,16,46,.3),transparent 60%),linear-gradient(135deg,#0a1e3f,#123a6b 50%,#0a1e3f);}
+.player .placeholder.hide{display:none;}
+.player .placeholder .label{font-size:clamp(20px,5vw,32px);font-weight:900;letter-spacing:4px;}
+.player .placeholder .sub{font-size:12px;opacity:.65;margin-top:8px;}
+.live-tag{position:absolute;top:12px;right:12px;background:var(--live);color:#fff;font-weight:900;padding:5px 12px;border-radius:6px;font-size:12px;display:flex;align-items:center;gap:6px;z-index:3;box-shadow:0 4px 12px rgba(225,29,46,.5);}
+.live-tag::before{content:"";width:7px;height:7px;background:#fff;border-radius:50%;animation:pulse 1.2s infinite;}
+.live-tag.replay{background:#2563eb;}
+.live-tag.replay::before{display:none;}
+.live-tag.off{background:#475569;box-shadow:none;}
+.live-tag.off::before{display:none;}
+.stop-btn{position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,.75);backdrop-filter:blur(10px);color:#fff;border:1px solid rgba(255,255,255,.25);padding:9px 14px;border-radius:10px;cursor:pointer;font-size:13px;font-family:inherit;font-weight:600;z-index:3;}
+.stop-overlay{position:absolute;inset:0;background:rgba(10,30,63,.92);display:none;place-items:center;color:#fff;text-align:center;padding:20px;backdrop-filter:blur(10px);z-index:4;}
+.stop-overlay.show{display:grid;animation:fadeIn .3s;}
+.stop-overlay .icon{font-size:56px;margin-bottom:14px;}
+.stop-overlay .msg{font-size:clamp(16px,4vw,22px);font-weight:900;}
+.stop-overlay .sub{font-size:13px;opacity:.75;margin-top:10px;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.camera-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px;}
+.cam-btn{flex:1;min-width:100px;padding:10px;border-radius:10px;border:none;background:#fff;color:#0f172a;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer;box-shadow:var(--shadow);}
+.cam-btn.active{background:var(--live);color:#fff;animation:pulse 1.5s infinite;}
+.cam-btn:disabled{opacity:.4;}
+.cam-status{font-size:11px;color:var(--muted);font-weight:600;}
+#camPreview{display:none;width:100%;border-radius:var(--radius);margin-top:8px;background:#000;aspect-ratio:16/9;box-shadow:var(--shadow-lg);}
+.news-info{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:16px;box-shadow:var(--shadow);}
+.news-info h2{font-size:clamp(16px,4.5vw,21px);line-height:1.7;margin-bottom:12px;font-weight:800;}
+.news-meta{display:flex;gap:12px;font-size:12px;color:var(--muted);margin-bottom:12px;flex-wrap:wrap;align-items:center;}
+.news-summary{color:#334155;line-height:1.95;font-size:14.5px;}
+.btn-row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
+.btn{flex:1;min-width:100px;padding:12px 16px;border-radius:12px;border:none;cursor:pointer;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;font-family:inherit;}
+.btn-primary{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.35);}
+.btn-light{background:#f1f5f9;color:#0f172a;}
+.btn-danger{background:#fee2e2;color:#991b1b;}
+.section-title{font-size:15px;margin:20px 0 10px;display:flex;align-items:center;gap:8px;font-weight:800;}
+.section-title::before{content:"";width:4px;height:18px;background:var(--red);border-radius:2px;}
+.chips{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{background:#fff;border:1.5px solid #e2e8f0;border-radius:20px;padding:8px 16px;font-size:13px;cursor:pointer;color:#475569;font-family:inherit;font-weight:600;white-space:nowrap;}
+.chip.active{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 4px 12px rgba(10,30,63,.25);}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+@media(min-width:640px){.grid{grid-template-columns:repeat(3,1fr);}}
+.card{background:var(--card);border-radius:12px;overflow:hidden;cursor:pointer;box-shadow:var(--shadow);}
+.card .thumb{aspect-ratio:16/9;position:relative;overflow:hidden;background:linear-gradient(135deg,#1e3a8a,#0a1e3f);display:grid;place-items:center;color:#fff;}
+.card .thumb .play-icon{position:absolute;font-size:32px;opacity:.9;text-shadow:0 2px 12px rgba(0,0,0,.7);background:rgba(0,0,0,.4);width:52px;height:52px;border-radius:50%;display:grid;place-items:center;}
+.card .thumb .dur{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.8);color:#fff;font-size:11px;padding:3px 7px;border-radius:5px;font-weight:600;}
+.card .thumb .badge-live{position:absolute;top:8px;right:8px;background:var(--live);color:#fff;font-size:10px;font-weight:900;padding:3px 8px;border-radius:4px;}
+.card .info{padding:10px 12px;}
+.card .info .title{font-size:13px;line-height:1.65;margin-bottom:6px;font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.card .info .src{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;}
+.card .info .src .views{font-size:10px;background:#f1f5f9;padding:2px 6px;border-radius:4px;color:#475569;}
+.modal-bg{position:fixed;inset:0;background:rgba(10,30,63,.7);z-index:100;display:none;place-items:center;padding:8px;overflow:auto;backdrop-filter:blur(6px);}
+.modal-bg.show{display:grid;}
+.modal{background:#fff;border-radius:16px;padding:20px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;margin:auto;box-shadow:0 25px 70px rgba(0,0,0,.4);}
+.modal h2{font-size:17px;margin-bottom:16px;display:flex;align-items:center;gap:8px;font-weight:800;}
+.modal .close{float:left;background:#f1f5f9;border:none;width:32px;height:32px;border-radius:50%;font-size:20px;cursor:pointer;color:#475569;line-height:1;font-family:inherit;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:12px;margin-bottom:6px;color:#334155;font-weight:700;}
+.field input,.field select,.field textarea{width:100%;padding:12px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:14px;font-family:inherit;background:#fff;color:#0f172a;}
+.field textarea{resize:vertical;min-height:100px;line-height:1.9;}
+.field .hint{font-size:11px;color:var(--muted);margin-top:5px;}
+.tab-btn{flex:1;min-width:fit-content;padding:8px 12px;border-radius:8px;border:none;background:transparent;color:#64748b;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;}
+.tab-btn.active{background:#fff;color:var(--blue);box-shadow:0 2px 6px rgba(0,0,0,.08);}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+.admin-section{border-top:1px solid #e2e8f0;padding-top:16px;margin-top:16px;}
+.admin-section h4{font-size:13px;margin-bottom:12px;color:var(--blue);font-weight:800;}
+.news-item{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:12px;margin-bottom:8px;}
+.news-item .ni-title{font-size:13px;font-weight:700;margin-bottom:6px;line-height:1.6;}
+.news-item .ni-meta{font-size:11px;color:var(--muted);margin-bottom:8px;display:flex;flex-wrap:wrap;gap:6px;}
+.news-item .ni-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.mini-btn{background:#f1f5f9;border:none;padding:8px 11px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:600;}
+.highlight-row{display:flex;gap:6px;margin-bottom:6px;align-items:center;}
+.highlight-row input{flex:1;padding:9px;border:1.5px solid #e2e8f0;border-radius:8px;font-family:inherit;font-size:13px;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.stat-card{background:linear-gradient(135deg,#fff,#f8fafc);border-radius:12px;padding:14px;border:1.5px solid #e2e8f0;}
+.stat-card .num{font-size:22px;font-weight:900;color:var(--blue);}
+.stat-card .lbl{font-size:11px;color:var(--muted);margin-top:4px;font-weight:600;}
+.feedback-box{background:linear-gradient(135deg,#0a1e3f,#123a6b);color:#fff;border-radius:var(--radius);padding:18px;margin-top:18px;}
+.feedback-box h3{font-size:15px;margin-bottom:6px;font-weight:800;}
+.feedback-box .sub{font-size:12px;opacity:.75;margin-bottom:14px;}
+.feedback-box .field input,.feedback-box .field textarea{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#fff;}
+.feedback-box .field input::placeholder,.feedback-box .field textarea::placeholder{color:rgba(255,255,255,.5);}
+.feedback-box .field label{color:rgba(255,255,255,.9);}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(120px);background:#0f172a;color:#fff;padding:13px 22px;border-radius:12px;font-size:13px;z-index:200;transition:all .3s;opacity:0;max-width:90%;text-align:center;font-weight:600;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.install-bar{position:fixed;bottom:0;left:0;right:0;z-index:90;background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;padding:12px 16px;display:none;align-items:center;gap:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom));}
+.install-bar.show{display:flex;}
+.install-bar button{background:#fff;color:var(--blue);border:none;padding:8px 16px;border-radius:8px;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer;}
+footer{text-align:center;padding:24px 16px;color:var(--muted);font-size:12px;}
+.loading{text-align:center;padding:30px;color:var(--muted);font-size:13px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">س</div>
+  <div class="brand"><h1>سام نیوز</h1><span class="tagline">پوشش زنده اخبار</span></div>
+  <div class="hd-actions"><button id="userBtn" onclick="onUserBtn()">👤 ورود</button></div>
+</header>
+
+<div class="ticker"><span class="lb">فوری</span><span class="txt" id="tickerText">در حال بارگذاری…</span></div>
+
+<main>
+  <div class="status-bar">
+    <button class="badge" id="badgeLive" onclick="setStatus('live')">🔴 زنده</button>
+    <button class="badge" id="badgeReplay" onclick="setStatus('replay')">🔵 بازپخش</button>
+    <button class="badge" id="badgeOff" onclick="setStatus('off')">⚫ خاموش</button>
+    <span class="viewers">👁️ <b id="viewers">۰</b> بیننده</span>
+  </div>
+
+  <div class="player">
+    <div class="placeholder" id="placeholder"><div><div class="label">SAM NEWS</div><div class="sub">پخش اصلی سام نیوز</div></div></div>
+    <video id="mainVideo" controls playsinline preload="metadata"></video>
+    <div class="live-tag" id="liveTag">زنده</div>
+    <button class="stop-btn" id="stopBtn" onclick="toggleStop()">⏸ توقف خبر</button>
+    <div class="stop-overlay" id="stopOverlay"><div><div class="icon">⏸️</div><div class="msg">اخبار برای چند لحظه متوقف شد</div><div class="sub">لطفاً چند لحظه صبر کنید…</div></div></div>
+  </div>
+
+  <div class="camera-bar">
+    <button class="cam-btn" id="camBtn" onclick="toggleCamera()">📷 دوربین</button>
+    <button class="cam-btn" id="recBtn" onclick="toggleRecord()" disabled>🔴 ضبط</button>
+    <button class="cam-btn" onclick="switchCamera()" id="switchBtn" disabled>🔄 چرخش</button>
+    <span class="cam-status" id="camStatus">غیرفعال</span>
+  </div>
+  <video id="camPreview" autoplay muted playsinline></video>
+
+  <div class="news-info">
+    <h2 id="mainTitle">در حال بارگذاری…</h2>
+    <div class="news-meta"><span>🗓️ <span id="mainDate">امروز</span></span><span>👁️ <span id="mainViews">۰</span> بیننده</span><span>📰 سام نیوز</span></div>
+    <p class="news-summary" id="mainSummary"></p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="watchNow()">▶️ تماشا</button>
+      <button class="btn btn-light" onclick="saveNews()">🔖 ذخیره</button>
+      <button class="btn btn-light" onclick="shareNews()">🔗 هم‌رسانی</button>
+    </div>
+  </div>
+
+  <h3 class="section-title">هایلایت‌ها</h3>
+  <div class="chips" id="chips"></div>
+
+  <h3 class="section-title">آخرین اخبار</h3>
+  <div class="grid" id="newsGrid"><div class="loading">در حال بارگذاری…</div></div>
+
+  <div class="feedback-box">
+    <h3>✉️ پیام به سازنده</h3>
+    <div class="sub">نظر، پیشنهاد یا انتقاد خود را بفرستید</div>
+    <div class="field"><label>نام شما</label><input type="text" id="fbName" placeholder="نام (اختیاری)" /></div>
+    <div class="field"><label>پیام *</label><textarea id="fbMsg" placeholder="پیام خود را بنویسید..."></textarea></div>
+    <button class="btn btn-primary" style="width:100%;" onclick="sendFeedback()">📤 ارسال</button>
+  </div>
+</main>
+
+<footer>© سام نیوز — تمام حقوق محفوظ است.</footer>
+
+<div class="install-bar" id="installBar">
+  <div style="font-size:24px;">📲</div>
+  <div style="flex:1;"><b style="font-size:13px;display:block;">نصب اپ سام نیوز</b><span style="font-size:11px;opacity:.8;">دسترسی سریع از صفحه اصلی</span></div>
+  <button onclick="installPWA()">نصب</button>
+  <button onclick="dismissInstall()" style="background:transparent;color:#fff;">✖</button>
+</div>
+
+<div class="modal-bg" id="loginModal">
+  <div class="modal" style="max-width:400px;">
+    <button class="close" onclick="closeM('loginModal')">×</button>
+    <h2>🔐 ورود به سام نیوز</h2>
+    <div class="field"><label>ایمیل</label><input type="email" id="loginEmail" placeholder="admin@samnews.ir" /></div>
+    <div class="field"><label>رمز عبور</label><input type="password" id="loginPass" placeholder="••••••" /></div>
+    <button class="btn btn-primary" style="width:100%;" onclick="doLogin()">ورود</button>
+  </div>
+</div>
+
+<div class="modal-bg" id="adminModal">
+  <div class="modal">
+    <button class="close" onclick="closeM('adminModal')">×</button>
+    <h2>🛡️ پنل مدیریت</h2>
+    <div style="display:flex;gap:4px;background:#f1f5f9;padding:4px;border-radius:10px;margin-bottom:16px;overflow-x:auto;">
+      <button class="tab-btn active" data-tab="tab-news" onclick="switchTab('tab-news')">📝 خبر</button>
+      <button class="tab-btn" data-tab="tab-highlights" onclick="switchTab('tab-highlights')">🏷️ هایلایت</button>
+      <button class="tab-btn" data-tab="tab-settings" onclick="switchTab('tab-settings')">⚙️ تنظیمات</button>
+    </div>
+    <div class="tab-pane active" id="tab-news">
+      <h4 id="editorTitle" style="font-size:14px;font-weight:800;margin-bottom:12px;">📝 افزودن خبر جدید</h4>
+      <div class="field"><label>عنوان *</label><input type="text" id="newsTitle" /></div>
+      <div class="field"><label>متن *</label><textarea id="newsSummary"></textarea></div>
+      <div class="field"><label>دسته</label><select id="newsCat"></select></div>
+      <div class="field"><label>لینک ویدئو</label><input type="text" id="newsVideo" placeholder="https://..." /></div>
+      <div class="field"><label>مدت</label><input type="text" id="newsDuration" value="۳:۰۰" /></div>
+      <div class="field"><label style="display:flex;gap:8px;cursor:pointer;"><input type="checkbox" id="newsLive" style="width:auto;" /><span>زنده (LIVE)</span></label></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="submitNews()" id="submitBtn">✅ ثبت</button>
+        <button class="btn btn-light" onclick="resetEditor()">لغو</button>
+      </div>
+      <div class="admin-section"><h4>📚 اخبار (<span id="newsCount">۰</span>)</h4><div id="newsList"></div></div>
+    </div>
+    <div class="tab-pane" id="tab-highlights">
+      <h4 style="font-size:14px;font-weight:800;margin-bottom:12px;">🏷️ هایلایت‌ها</h4>
+      <div class="field"><input type="text" id="newHighlight" placeholder="نام جدید..." /><button class="btn btn-light" style="margin-top:8px;width:100%;" onclick="addHighlight()">➕ افزودن</button></div>
+      <div id="highlightEditors"></div>
+    </div>
+    <div class="tab-pane" id="tab-settings">
+      <h4 style="font-size:14px;font-weight:800;margin-bottom:12px;">📰 تیتر اصلی</h4>
+      <div class="field"><input type="text" id="mainTitleInput" /></div>
+      <div class="field"><textarea id="mainSummaryInput"></textarea></div>
+      <button class="btn btn-primary" style="width:100%;" onclick="applyMain()">💾 ذخیره</button>
+      <div class="admin-section"><h4>📢 نوار فوری</h4><div class="field"><input type="text" id="tickerInput" /></div><button class="btn btn-primary" style="width:100%;" onclick="applyTicker()">💾 ذخیره</button></div>
+      <div class="admin-section"><h4>📺 کنترل پخش</h4>
+        <div style="display:flex;gap:6px;margin-bottom:8px;"><button class="btn btn-light" onclick="setStatus('live')">🔴</button><button class="btn btn-light" onclick="setStatus('replay')">🔵</button><button class="btn btn-light" onclick="setStatus('off')">⚫</button></div>
+        <button class="btn btn-light" style="width:100%;" onclick="toggleStop()">⏸ توقف / ادامه</button>
+      </div>
+      <div class="admin-section"><button class="btn btn-light" style="width:100%;" onclick="doLogout()">🚪 خروج</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, signInAnonymously }
+  from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc,
+  onSnapshot, query, orderBy, serverTimestamp, increment }
+  from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBWCPO6MrgVjllMBJlBPDLjyXssY8N70fE",
+  authDomain: "sam-news-c14c2.firebaseapp.com",
+  projectId: "sam-news-c14c2",
+  storageBucket: "sam-news-c14c2.firebasestorage.app",
+  messagingSenderId: "104338731792",
+  appId: "1:104338731792:web:bc0c1896ac41bf1d2bab95"
+};
+
+const ADMIN_UID = "yVQrJscsKTQocZoRHdwNGkSO8BB2";
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null, isAdminUser = false;
+let settings = { status:"live", stopped:false, title:"", summary:"", ticker:"", views:0 };
+let newsList = [];
+let highlights = ["سیاسی","اقتصادی","بین‌الملل","گزارش ویژه"];
+let activeHighlight = "همه";
+let editingId = null;
+let camStream = null, camFacing = "environment", mediaRecorder = null, recordedChunks = [];
+
+function toFa(n){ return String(n).replace(/\d/g, d => "۰۱۲۳۴۵۶۷۸۹"[d]); }
+function escapeHtml(s){ return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+let toastTimer;
+function showToast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove("show"),2400); }
+function openM(id){ document.getElementById(id).classList.add("show"); }
+function closeM(id){ document.getElementById(id).classList.remove("show"); }
+document.querySelectorAll(".modal-bg").forEach(m => m.addEventListener("click", e => { if(e.target === m) m.classList.remove("show"); }));
+
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user;
+  isAdminUser = user && user.uid === ADMIN_UID;
+  updateUserUI();
+  if(user && !user.isAnonymous) {
+    try {
+      const u = await getDoc(doc(db, "users", user.uid));
+      if(!u.exists()) await setDoc(doc(db, "users", user.uid), { email: user.email, name: user.email.split("@")[0], role: user.uid === ADMIN_UID ? "admin" : "reporter", createdAt: serverTimestamp() });
+    } catch(e){}
+  }
+});
+
+async function ensureAnonymousAuth(){ if(auth.currentUser) return; try { await signInAnonymously(auth); } catch(e){} }
+
+function updateUserUI(){
+  const b = document.getElementById("userBtn");
+  if(currentUser && !currentUser.isAnonymous){ b.textContent = "👤 " + (currentUser.email||"").split("@")[0]; b.style.background = "rgba(34,197,94,.3)"; }
+  else { b.textContent = "👤 ورود"; b.style.background = "rgba(255,255,255,.12)"; }
+}
+
+function onUserBtn(){
+  if(currentUser && !currentUser.isAnonymous){
+    if(isAdminUser) openM("adminModal");
+    else { if(confirm("خارج شوید؟")) doLogout(); }
+  } else openM("loginModal");
+}
+
+async function doLogin(){
+  const email = document.getElementById("loginEmail").value.trim();
+  const pass = document.getElementById("loginPass").value;
+  if(!email || !pass){ showToast("❌ ایمیل و رمز را وارد کنید"); return; }
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+    closeM("loginModal");
+    document.getElementById("loginEmail").value = ""; document.getElementById("loginPass").value = "";
+    showToast("✅ خوش آمدید");
+    setTimeout(() => { if(isAdminUser) openM("adminModal"); }, 400);
+  } catch(e){
+    let msg = "❌ خطا در ورود";
+    if(e.code === "auth/wrong-password" || e.code === "auth/invalid-credential") msg = "❌ رمز اشتباه";
+    if(e.code === "auth/user-not-found") msg = "❌ کاربر یافت نشد";
+    if(e.code === "auth/too-many-requests") msg = "🚫 تلاش زیاد";
+    showToast(msg);
+  }
+}
+async function doLogout(){ try { await signOut(auth); showToast("👋 خارج شدید"); closeM("adminModal"); } catch(e){} setTimeout(() => ensureAnonymousAuth(), 500); }
+
+function startListeners(){
+  onSnapshot(doc(db, "settings", "main"), (snap) => {
+    if(snap.exists()) settings = { ...settings, ...snap.data() };
+    else setDoc(doc(db, "settings", "main"), { status:"live", stopped:false, title:"آخرین تحولات سیاسی و بین‌الملل؛ گزارش ویژه سام نیوز", summary:"در این گزارش، مهم‌ترین خبرهای سیاسی، اقتصادی و بین‌الملل را مرور می‌کنیم.", ticker:"آخرین تحولات سیاسی و اقتصادی را با سام نیوز دنبال کنید", views: 0 }).catch(()=>{});
+    renderSettings();
+  }, e => console.warn("settings:", e));
+  const q = query(collection(db, "news"), orderBy("createdAt", "desc"));
+  onSnapshot(q, (snap) => { newsList = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderNews(); renderAdmin(); },
+    e => { onSnapshot(collection(db, "news"), (s2) => { newsList = s2.docs.map(d => ({ id: d.id, ...d.data() })); renderNews(); renderAdmin(); }); });
+  onSnapshot(collection(db, "highlights"), (snap) => {
+    const list = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (a.order||0)-(b.order||0));
+    highlights = list.length ? list.map(x => x.name) : ["سیاسی","اقتصادی","بین‌الملل","گزارش ویژه"];
+    renderChips(); renderAdmin();
+  }, e => console.warn(e));
+}
+
+async function seedHighlightsIfEmpty(){
+  try { const snap = await getDocs(collection(db, "highlights")); if(snap.empty){ const defs = ["سیاسی","اقتصادی","بین‌الملل","گزارش ویژه"]; for(let i=0; i<defs.length; i++) await addDoc(collection(db, "highlights"), { name: defs[i], order: i }); } } catch(e){}
+}
+
+function renderSettings(){
+  const tag = document.getElementById("liveTag");
+  document.getElementById("badgeLive").className = "badge" + (settings.status==="live" ? " live":"");
+  document.getElementById("badgeReplay").className = "badge" + (settings.status==="replay" ? " replay":"");
+  document.getElementById("badgeOff").className = "badge" + (settings.status==="off" ? " off":"");
+  if(settings.status === "live"){ tag.textContent="زنده"; tag.className="live-tag"; }
+  else if(settings.status === "replay"){ tag.textContent="بازپخش"; tag.className="live-tag replay"; }
+  else { tag.textContent="خاموش"; tag.className="live-tag off"; }
+  document.getElementById("stopOverlay").classList.toggle("show", !!settings.stopped);
+  document.getElementById("stopBtn").textContent = settings.stopped ? "▶️ ادامه خبر" : "⏸ توقف خبر";
+  document.getElementById("mainTitle").textContent = settings.title || "سام نیوز";
+  document.getElementById("mainSummary").textContent = settings.summary || "";
+  document.getElementById("tickerText").textContent = settings.ticker || "سام نیوز";
+  document.getElementById("mainDate").textContent = new Intl.DateTimeFormat('fa-IR',{dateStyle:'full'}).format(new Date());
+  document.getElementById("viewers").textContent = toFa(settings.views || 0);
+  document.getElementById("mainViews").textContent = toFa(settings.views || 0);
+  const mt=document.getElementById("mainTitleInput"); if(mt) mt.value = settings.title||"";
+  const ms=document.getElementById("mainSummaryInput"); if(ms) ms.value = settings.summary||"";
+  const ti=document.getElementById("tickerInput"); if(ti) ti.value = settings.ticker||"";
+}
+
+function renderChips(){
+  const c = document.getElementById("chips"); c.innerHTML = "";
+  const all = document.createElement("button");
+  all.className = "chip" + (activeHighlight==="همه" ? " active" : ""); all.textContent = "همه";
+  all.onclick = () => { activeHighlight = "همه"; renderNews(); renderChips(); };
+  c.appendChild(all);
+  highlights.forEach(h => {
+    const b = document.createElement("button");
+    b.className = "chip" + (activeHighlight===h ? " active" : ""); b.textContent = h;
+    b.onclick = () => { activeHighlight = h; renderNews(); renderChips(); };
+    c.appendChild(b);
+  });
+}
+
+function renderNews(){
+  const g = document.getElementById("newsGrid");
+  const list = activeHighlight === "همه" ? newsList : newsList.filter(n => n.cat === activeHighlight);
+  if(!list.length){ g.innerHTML = '<div class="loading" style="grid-column:1/-1;">خبری در این دسته نیست</div>'; return; }
+  g.innerHTML = "";
+  list.forEach(n => {
+    const d = document.createElement("div"); d.className = "card";
+    d.innerHTML = `<div class="thumb">${n.live ? '<span class="badge-live">LIVE</span>' : ''}<span class="play-icon">▶</span><span class="dur">${escapeHtml(n.duration||'')}</span></div><div class="info"><div class="title">${escapeHtml(n.title)}</div><div class="src"><span>${escapeHtml(n.cat||"")}</span><span class="views">👁️ ${toFa(n.views||0)}</span></div></div>`;
+    d.onclick = () => playNews(n);
+    g.appendChild(d);
+  });
+}
+
+function renderAdmin(){
+  const sel = document.getElementById("newsCat");
+  if(sel){ const cur=sel.value; sel.innerHTML = highlights.map(h => `<option ${h===cur?"selected":""}>${h}</option>`).join(""); }
+  const nl = document.getElementById("newsList");
+  if(nl){
+    document.getElementById("newsCount").textContent = toFa(newsList.length);
+    nl.innerHTML = "";
+    newsList.slice(0, 30).forEach(n => {
+      const d = document.createElement("div"); d.className = "news-item";
+      d.innerHTML = `<div class="ni-title">${escapeHtml(n.title)}</div><div class="ni-meta"><span>${escapeHtml(n.cat||"")}</span><span>• ${escapeHtml(n.duration||"")}</span>${n.live?'<span>• 🔴</span>':''}<span>• 👁️ ${toFa(n.views||0)}</span></div><div class="ni-actions"><button class="mini-btn" onclick="editNews('${n.id}')">✏️</button><button class="mini-btn" style="background:#fee2e2;color:#991b1b;" onclick="deleteNews('${n.id}')">🗑️</button></div>`;
+      nl.appendChild(d);
+    });
+  }
+  const he = document.getElementById("highlightEditors");
+  if(he){
+    he.innerHTML = "";
+    highlights.forEach((h, i) => {
+      const r = document.createElement("div"); r.className = "highlight-row";
+      r.innerHTML = `<input type="text" value="${escapeHtml(h)}" data-idx="${i}" /><button class="mini-btn" onclick="moveHighlight(${i},-1)">↑</button><button class="mini-btn" onclick="moveHighlight(${i},1)">↓</button><button class="mini-btn" style="background:#fee2e2;color:#991b1b;" onclick="deleteHighlight(${i})">✖</button>`;
+      r.querySelector("input").onchange = async (e) => { const v=e.target.value.trim(); if(!v)return; await renameHighlight(i, v); };
+      he.appendChild(r);
+    });
+  }
+}
+
+async function setStatus(s){ if(!isAdminUser){ showToast("فقط مدیر کل"); return; } try { await updateDoc(doc(db, "settings", "main"), { status: s }); showToast("✅ " + s); } catch(e){ showToast("خطا"); } }
+async function toggleStop(){ if(!isAdminUser){ showToast("فقط مدیر کل"); return; } try { await updateDoc(doc(db, "settings", "main"), { stopped: !settings.stopped }); showToast(settings.stopped ? "▶️ ادامه" : "⏸ متوقف"); } catch(e){} }
+
+function playNews(n){
+  document.getElementById("mainTitle").textContent = n.title;
+  document.getElementById("mainSummary").textContent = n.summary || "";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  const v = document.getElementById("mainVideo"), ph = document.getElementById("placeholder");
+  if(n.videoUrl){ v.src = n.videoUrl; v.style.display = "block"; ph.classList.add("hide"); }
+  else { v.pause(); v.removeAttribute("src"); v.style.display = "none"; ph.classList.remove("hide"); }
+  if(n.id){ updateDoc(doc(db, "news", n.id), { views: increment(1) }).catch(()=>{}); updateDoc(doc(db, "settings", "main"), { views: increment(1) }).catch(()=>{}); }
+}
+function playNewsById(id){ const n = newsList.find(x => x.id === id); if(n) playNews(n); }
+function watchNow(){ const v=document.getElementById("mainVideo"); if(v.src) v.play().catch(()=>{}); else showToast("ویدئویی ثبت نشده"); }
+function saveNews(){ showToast("🔖 ذخیره شد"); }
+async function shareNews(){ const url=location.href, title=document.getElementById("mainTitle").textContent; if(navigator.share){ try{ await navigator.share({title,url}); }catch(e){} } else { try{ await navigator.clipboard.writeText(url); showToast("🔗 کپی شد"); }catch(e){} } }
+
+async function submitNews(){
+  if(!isAdminUser){ showToast("فقط مدیر کل"); return; }
+  const title=document.getElementById("newsTitle").value.trim();
+  const summary=document.getElementById("newsSummary").value.trim();
+  const cat=document.getElementById("newsCat").value;
+  const duration=document.getElementById("newsDuration").value.trim()||"۰:۰۰";
+  const live=document.getElementById("newsLive").checked;
+  const videoUrl=document.getElementById("newsVideo").value.trim();
+  if(!title){ showToast("عنوان لازم"); return; } if(!summary){ showToast("متن لازم"); return; }
+  try {
+    if(editingId){ await updateDoc(doc(db, "news", editingId), { title, summary, cat, duration, live, videoUrl }); showToast("✅ ویرایش"); }
+    else { await addDoc(collection(db, "news"), { title, summary, cat, duration, live, videoUrl, source:"سام نیوز", views:0, authorId:currentUser.uid, authorEmail:currentUser.email, createdAt:serverTimestamp() }); showToast("✅ ثبت"); }
+    resetEditor();
+  } catch(e){ showToast("❌ خطا"); }
+}
+function editNews(id){
+  if(!isAdminUser) return;
+  const n = newsList.find(x => x.id === id); if(!n) return;
+  editingId = id;
+  document.getElementById("newsTitle").value = n.title||"";
+  document.getElementById("newsSummary").value = n.summary||"";
+  document.getElementById("newsCat").value = n.cat||"";
+  document.getElementById("newsDuration").value = n.duration||"";
+  document.getElementById("newsLive").checked = !!n.live;
+  document.getElementById("newsVideo").value = n.videoUrl||"";
+  document.getElementById("editorTitle").textContent = "✏️ ویرایش";
+  document.getElementById("submitBtn").textContent = "💾 ذخیره";
+  switchTab("tab-news");
+}
+async function deleteNews(id){ if(!isAdminUser) return; if(!confirm("حذف؟")) return; try { await deleteDoc(doc(db, "news", id)); showToast("🗑️"); } catch(e){} }
+function resetEditor(){
+  editingId = null;
+  document.getElementById("newsTitle").value=""; document.getElementById("newsSummary").value=""; document.getElementById("newsVideo").value="";
+  document.getElementById("newsDuration").value="۳:۰۰"; document.getElementById("newsLive").checked=false;
+  document.getElementById("editorTitle").textContent="📝 افزودن خبر جدید";
+  document.getElementById("submitBtn").textContent="✅ ثبت";
+}
+
+async function addHighlight(){ if(!isAdminUser) return; const v=document.getElementById("newHighlight").value.trim(); if(!v) return; if(highlights.includes(v)){ showToast("⚠️ وجود دارد"); return; } try { await addDoc(collection(db, "highlights"), { name:v, order:highlights.length }); document.getElementById("newHighlight").value=""; showToast("✅"); } catch(e){} }
+async function renameHighlight(i, newName){ if(!isAdminUser) return; try { const snap=await getDocs(collection(db,"highlights")); const list=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order||0)-(b.order||0)); if(list[i]) await updateDoc(doc(db,"highlights",list[i].id),{name:newName}); } catch(e){} }
+async function deleteHighlight(i){ if(!isAdminUser) return; if(!confirm("حذف؟")) return; try { const snap=await getDocs(collection(db,"highlights")); const list=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order||0)-(b.order||0)); if(list[i]) await deleteDoc(doc(db,"highlights",list[i].id)); } catch(e){} }
+async function moveHighlight(i, dir){ if(!isAdminUser) return; const j=i+dir; if(j<0||j>=highlights.length) return; try { const snap=await getDocs(collection(db,"highlights")); const list=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order||0)-(b.order||0)); if(list[i]&&list[j]){ await updateDoc(doc(db,"highlights",list[i].id),{order:j}); await updateDoc(doc(db,"highlights",list[j].id),{order:i}); } } catch(e){} }
+
+async function applyMain(){ if(!isAdminUser) return; try { await updateDoc(doc(db, "settings", "main"), { title: document.getElementById("mainTitleInput").value.trim(), summary: document.getElementById("mainSummaryInput").value.trim() }); showToast("✅"); } catch(e){} }
+async function applyTicker(){ if(!isAdminUser) return; try { await updateDoc(doc(db, "settings", "main"), { ticker: document.getElementById("tickerInput").value.trim() }); showToast("✅"); } catch(e){} }
+
+async function sendFeedback(){ const name=document.getElementById("fbName").value.trim()||"ناشناس"; const msg=document.getElementById("fbMsg").value.trim(); if(!msg){ showToast("پیام بنویس"); return; } try { await addDoc(collection(db, "feedback"), { name, message: msg, createdAt: serverTimestamp() }); document.getElementById("fbName").value=""; document.getElementById("fbMsg").value=""; showToast("✅ ارسال شد"); } catch(e){ showToast("خطا"); } }
+
+async function toggleCamera(){ if(camStream){ stopCamera(); return; } try { camStream=await navigator.mediaDevices.getUserMedia({ video:{ facingMode:camFacing }, audio:true }); const p=document.getElementById("camPreview"); p.srcObject=camStream; p.style.display="block"; document.getElementById("camBtn").textContent="⛔ بستن"; document.getElementById("camBtn").classList.add("active"); document.getElementById("recBtn").disabled=false; document.getElementById("switchBtn").disabled=false; document.getElementById("camStatus").textContent="🟢 فعال"; } catch(e){ showToast("دسترسی رد شد"); } }
+function stopCamera(){ if(camStream){ camStream.getTracks().forEach(t=>t.stop()); camStream=null; } if(mediaRecorder&&mediaRecorder.state!=="inactive") mediaRecorder.stop(); document.getElementById("camPreview").style.display="none"; document.getElementById("camBtn").textContent="📷 دوربین"; document.getElementById("camBtn").classList.remove("active"); document.getElementById("recBtn").disabled=true; document.getElementById("switchBtn").disabled=true; document.getElementById("camStatus").textContent="غیرفعال"; }
+async function switchCamera(){ camFacing=camFacing==="environment"?"user":"environment"; if(camStream){ stopCamera(); await toggleCamera(); } }
+function toggleRecord(){ if(!camStream){ showToast("اول دوربین"); return; } if(mediaRecorder&&mediaRecorder.state==="recording"){ mediaRecorder.stop(); return; } recordedChunks=[]; try { mediaRecorder=new MediaRecorder(camStream,{mimeType:"video/webm;codecs=vp9"}); } catch(e){ mediaRecorder=new MediaRecorder(camStream); } mediaRecorder.ondataavailable=e=>{ if(e.data.size>0) recordedChunks.push(e.data); }; mediaRecorder.onstop=()=>{ const blob=new Blob(recordedChunks,{type:"video/webm"}); showToast("✅ ضبط شد ("+Math.round(blob.size/1024/1024)+"MB)"); document.getElementById("recBtn").textContent="🔴 ضبط"; document.getElementById("camStatus").textContent="✅"; }; mediaRecorder.start(); document.getElementById("recBtn").textContent="⏹ توقف"; document.getElementById("camStatus").textContent="🔴 ضبط"; }
+
+function switchTab(id){ document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === id)); document.querySelectorAll(".tab-pane").forEach(p => p.classList.toggle("active", p.id === id)); }
+
+let deferredPrompt = null;
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferredPrompt = e; if(!localStorage.getItem("samnews_dismiss")) document.getElementById("installBar").classList.add("show"); });
+async function installPWA(){ if(deferredPrompt){ deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; } else showToast("از منوی مرورگر نصب کن"); }
+function dismissInstall(){ document.getElementById("installBar").classList.remove("show"); localStorage.setItem("samnews_dismiss","1"); }
+if("serviceWorker" in navigator){ window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(()=>{})); }
+
+(async function init(){ try { await ensureAnonymousAuth(); startListeners(); await seedHighlightsIfEmpty(); } catch(e){ console.error(e); } })();
+
+Object.assign(window, { onUserBtn, doLogin, doLogout, setStatus, toggleStop, playNewsById, submitNews, editNews, deleteNews, resetEditor, addHighlight, deleteHighlight, moveHighlight, applyMain, applyTicker, sendFeedback, toggleCamera, switchCamera, toggleRecord, switchTab, installPWA, dismissInstall, watchNow, saveNews, shareNews, closeM });
+</script>
+</body>
+  </html>
